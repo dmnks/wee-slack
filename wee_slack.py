@@ -3425,6 +3425,15 @@ class SlackMessage(object):
         if "edited" in self.message_json:
             text += " " + colorize_string(config.color_edited_suffix, "(edited)")
 
+        # Highlight standup messages
+        if self.message_json["text"].startswith("today: "):
+            text = colorize_string("14", text)
+        elif self.message_json["text"].startswith("yesterday: "):
+            text = colorize_string("11", text)
+        # Dim own messages
+        elif self.team.nick in str(self.sender):
+            text = colorize_string("darkgray", text)
+
         text += unwrap_attachments(self, text)
         text += unhtmlescape(unfurl_refs(unwrap_files(self, self.message_json, text)))
         text += unwrap_huddle(self, self.message_json, text)
