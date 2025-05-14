@@ -3425,11 +3425,13 @@ class SlackMessage(object):
         if "edited" in self.message_json:
             text += " " + colorize_string(config.color_edited_suffix, "(edited)")
 
-        # Highlight standup messages
-        if self.message_json["text"].startswith("today: "):
+        # Highlight team messages
+        if self.message_json["text"].lower().startswith("today: "):
             text = colorize_string("14", text)
-        elif self.message_json["text"].startswith("yesterday: "):
+        elif self.message_json["text"].lower().startswith("yesterday: "):
             text = colorize_string("11", text)
+        elif self.message_json["text"].lower().startswith("team: "):
+            text = colorize_string("9", text)
         # Dim own messages
         elif self.team.nick in str(self.sender):
             text = colorize_string("darkgray", text)
